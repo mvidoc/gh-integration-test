@@ -179,4 +179,4 @@ if ($method === 'DELETE' && count($segments) === 2) {
 }
 
 // Fallback
-fail('Method not allowed.', 405);
+fail('Method not allowded.', 405);
