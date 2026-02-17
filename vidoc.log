@@ -1,0 +1,10 @@
+{"level":"debug","message":"Scanning directory /Users/xnerhu/projects/vidoc/gh-integration-test, rootDir: /Users/xnerhu/projects/vidoc/gh-integration-test","timestamp":"2026-02-17T04:40:13.770Z"}
+{"level":"debug","message":"Making POST request to /v1/codebase","timestamp":"2026-02-17T04:40:13.772Z"}
+{"level":"debug","message":"Codebase created: 019c69e6-1c47-70f5-b721-51fbab4c6c75, branch: main, name: gh-integration-test","timestamp":"2026-02-17T04:40:14.282Z"}
+{"level":"debug","message":"Making POST request to /v1/codebase/019c69e6-1c47-70f5-b721-51fbab4c6c75/sync","timestamp":"2026-02-17T04:40:14.442Z"}
+{"level":"debug","message":"syncCodebaseResponse: [\n  \"package.json\",\n  \"main.ts\"\n]","timestamp":"2026-02-17T04:40:15.939Z"}
+{"level":"debug","message":"filesToPreprocess: {\n  \"forceReindex\": false,\n  \"filesToPreprocess\": [\n    {\n      \"path\": \"package.json\",\n      \"version\": \"b6386798a052517b100a248694d2d83bd64f19d8ec2109abde6d2f1d0b58745d\",\n      \"language\": \"json\"\n    },\n    {\n      \"path\": \"main.ts\",\n      \"version\": \"1b7ce3bf267ad941c95048221b94240a81aeaa463e49c077a8caf9b58202a874\",\n      \"language\": \"typescript\"\n    }\n  ]\n}","timestamp":"2026-02-17T04:40:15.940Z"}
+{"level":"debug","message":"Making GET request to /indexing-config","timestamp":"2026-02-17T04:40:15.948Z"}
+{"level":"debug","message":"Making GET request to /indexing-config","timestamp":"2026-02-17T04:40:15.952Z"}
+{"followRedirects":true,"level":"debug","message":"Making POST request to /index-file","timestamp":"2026-02-17T04:40:16.063Z"}
+{"followRedirects":true,"level":"debug","message":"Making POST request to /index-file","timestamp":"2026-02-17T04:40:16.198Z"}
