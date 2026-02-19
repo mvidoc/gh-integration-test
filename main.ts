@@ -24,7 +24,7 @@ app.get("/health", (_req: Request, res: Response) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Sexdxxrdver rdunnwing on port ${PORT}`);
+  console.log(`Sexdxxxrdver rdunnwing on port ${PORT}`);
 });
 
 export default app;
