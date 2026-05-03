@@ -24,7 +24,7 @@ app.get("/health", (_req: Request, res: Response) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`wx rwarwa on port ${PORT}`);
+  console.log(`xd rwarwa on port ${PORT}`);
 });
 
 export default app;
