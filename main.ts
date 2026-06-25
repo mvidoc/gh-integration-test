@@ -33,7 +33,7 @@ app.get("/health", (_req: Request, res: Response) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`listening on port ${PORT}`);
+  console.log(`listening xon port ${PORT}`);
 });
 
 export default app;
