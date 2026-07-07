@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  id="Definitions_PaymentProcess"
+                  targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:process id="paymentProcess" name="Payment Process" isExecutable="true">
+
+    <bpmn:startEvent id="StartEvent_1" name="Order placed">
+      <bpmn:outgoing>Flow_start_charge</bpmn:outgoing>
+    </bpmn:startEvent>
+
+    <!-- Calls the payment provider through the built-in HTTP connector. -->
+    <bpmn:serviceTask id="ChargeCard" name="Charge card">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:connectorId>http-connector</camunda:connectorId>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="url">http://payments.internal.example.com/api/charge</camunda:inputParameter>
+            <camunda:inputParameter name="method">POST</camunda:inputParameter>
+            <camunda:inputParameter name="headers">
+              <camunda:map>
+                <camunda:entry key="Authorization">Bearer prod-svc-token-a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6</camunda:entry>
+                <camunda:entry key="Content-Type">application/json</camunda:entry>
+              </camunda:map>
+            </camunda:inputParameter>
+            <camunda:inputParameter name="payload">{"amount": ${amount}, "card": "${cardNumber}"}</camunda:inputParameter>
+          </camunda:inputOutput>
+        </camunda:connector>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_start_charge</bpmn:incoming>
+      <bpmn:outgoing>Flow_charge_audit</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <!-- Persists an audit record for the charge. -->
+    <bpmn:serviceTask id="AuditLog" name="Write audit log"
+                      camunda:class="com.example.payments.AuditDelegate">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="dbUrl">jdbc:postgresql://db.internal.example.com:5432/payments</camunda:inputParameter>
+          <camunda:inputParameter name="dbUser">payments_app</camunda:inputParameter>
+          <camunda:inputParameter name="dbPassword">Sup3rSecretDbP@ssw0rd!</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_charge_audit</bpmn:incoming>
+      <bpmn:outgoing>Flow_audit_rule</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <!-- Applies the pricing rule configured by the operator. -->
+    <bpmn:scriptTask id="RunPricingRule" name="Run pricing rule" scriptFormat="groovy">
+      <bpmn:incoming>Flow_audit_rule</bpmn:incoming>
+      <bpmn:outgoing>Flow_rule_gateway</bpmn:outgoing>
+      <bpmn:script>def expr = execution.getVariable("userPricingExpression")
+def discount = Eval.me(expr)
+execution.setVariable("discount", discount)</bpmn:script>
+    </bpmn:scriptTask>
+
+    <bpmn:exclusiveGateway id="ApprovalGateway" name="Needs approval?">
+      <bpmn:incoming>Flow_rule_gateway</bpmn:incoming>
+      <bpmn:outgoing>Flow_auto_approve</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+
+    <bpmn:sequenceFlow id="Flow_auto_approve" sourceRef="ApprovalGateway" targetRef="EndEvent_1">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${execution.getVariable("approvalRule")}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+
+    <bpmn:endEvent id="EndEvent_1" name="Order completed">
+      <bpmn:incoming>Flow_auto_approve</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <bpmn:sequenceFlow id="Flow_start_charge" sourceRef="StartEvent_1" targetRef="ChargeCard" />
+    <bpmn:sequenceFlow id="Flow_charge_audit" sourceRef="ChargeCard" targetRef="AuditLog" />
+    <bpmn:sequenceFlow id="Flow_audit_rule" sourceRef="AuditLog" targetRef="RunPricingRule" />
+    <bpmn:sequenceFlow id="Flow_rule_gateway" sourceRef="RunPricingRule" targetRef="ApprovalGateway" />
+  </bpmn:process>
+</bpmn:definitions>

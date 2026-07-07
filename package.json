@@ -1,1 +1,21 @@
-{"dependencies": {}}
+{
+  "name": "payment-service",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Checkout service that drives the Camunda payment process.",
+  "scripts": {
+    "start": "ts-node main.ts",
+    "deploy:process": "ts-node src/camunda/deployProcess.ts"
+  },
+  "dependencies": {
+    "axios": "^1.7.7",
+    "express": "^4.19.2",
+    "form-data": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.14.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  }
+}
