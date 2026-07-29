@@ -11,6 +11,10 @@ app.get("/", (req, res) => {
 // Direct-origin reachability and whether the edge strips and reinjects this
 // header are controlled by deployment configuration outside this repository.
 app.post("/internal/document-import", async (req, res) => {
+  if (process.env.DOCUMENT_IMPORT_ENABLED !== "true") {
+    return res.status(404).send("not found");
+  }
+
   if (req.header("x-edge-principal") !== "document-importer") {
     return res.status(403).send("forbidden");
   }
