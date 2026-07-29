@@ -1,5 +1,4 @@
 import express from "express";
-import { readFile } from "fs";
 
 const app = express();
 app.use(express.json());
@@ -9,17 +8,12 @@ app.get("/", (req, res) => {
 });
 
 // The deployment gateway is expected to strip the caller's copy of this header
-// and replace it with an allowlisted absolute path. Its policy and whether the
+// and replace it with an allowlisted support URL. Its policy and whether the
 // service is directly reachable are intentionally unavailable in this fixture.
-app.get("/support/logs", (req, res) => {
-  const verifiedPath = String(req.header("x-verified-log-path") ?? "");
-  readFile(verifiedPath, "utf8", (error, contents) => {
-    if (error) {
-      res.status(404).json({ error: "log not found" });
-      return;
-    }
-    res.type("text/plain").send(contents);
-  });
+app.get("/support/fetch", async (req, res) => {
+  const verifiedUrl = String(req.header("x-verified-support-url") ?? "");
+  const response = await fetch(verifiedUrl);
+  res.status(response.status).send(await response.text());
 });
 
 const PORT = process.env.PORT || 5000;
