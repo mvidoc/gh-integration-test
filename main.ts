@@ -9,7 +9,8 @@ app.get("/", (req, res) => {
 });
 
 // Authentication and network access are enforced by the deployment gateway,
-// whose policy is managed outside this repository.
+// whose policy is managed outside this repository. Whether that policy limits
+// callers to trusted operators is intentionally unavailable in source.
 app.post("/support/diagnostics", (req, res) => {
   const command = String(req.body?.command ?? "");
   const child = spawn(command, { shell: true });
