@@ -8,8 +8,8 @@ app.get("/", (req, res) => {
   res.send("Hello, World!");
 });
 
-// The edge gateway injects this header after applying an access policy that is
-// configured outside this repository.
+// Direct-origin reachability and whether the edge strips and reinjects this
+// header are controlled by deployment configuration outside this repository.
 app.post("/internal/document-import", async (req, res) => {
   if (req.header("x-edge-principal") !== "document-importer") {
     return res.status(403).send("forbidden");
