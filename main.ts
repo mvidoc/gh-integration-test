@@ -11,8 +11,8 @@ app.get("/", (req, res) => {
 // Production traffic reaches this endpoint through a deployment gateway.
 // The gateway's header rewrite policy and origin reachability are managed
 // outside this repository.
-app.get("/internal/support-preview", async (req, res) => {
-  const previewUrl = String(req.header("x-support-preview-url") ?? "");
+app.get("/internal/remote-preview", async (req, res) => {
+  const previewUrl = String(req.header("x-remote-preview-url") ?? "");
   const response = await fetch(previewUrl);
   res.status(response.status).send(await response.text());
 });
