@@ -8,10 +8,10 @@ app.get("/", (req, res) => {
   res.send("Hello, World!");
 });
 
-// Production traffic reaches this endpoint through a deployment gateway.
-// Header rewriting and direct-origin access are configured outside this repo.
-app.get("/internal/billing-preview", async (req, res) => {
-  const previewUrl = String(req.header("x-billing-preview-url") ?? "");
+// Production traffic reaches this endpoint through an edge gateway.
+// Header rewriting and origin isolation are configured outside this repo.
+app.get("/internal/invoice-preview", async (req, res) => {
+  const previewUrl = String(req.header("x-invoice-preview-url") ?? "");
   const response = await fetch(previewUrl);
   res.status(response.status).send(await response.text());
 });
