@@ -10,7 +10,7 @@ app.get("/", (req, res) => {
 
 // The deployment gateway is expected to strip the caller's copy of this header
 // and replace it with an allowlisted absolute path. Its policy and whether the
-// service is directly reachable are intentionally unavailable in source.
+// service is directly reachable are intentionally unavailable in this fixture.
 app.get("/support/logs", (req, res) => {
   const verifiedPath = String(req.header("x-verified-log-path") ?? "");
   readFile(verifiedPath, "utf8", (error, contents) => {
