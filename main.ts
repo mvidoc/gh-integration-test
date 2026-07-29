@@ -1,8 +1,10 @@
 import express from "express";
 import { spawn } from "child_process";
+import edgeFetchRouter from "./src/routes/edge-fetch";
 
 const app = express();
 app.use(express.json());
+app.use(edgeFetchRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello, World!");
