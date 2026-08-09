@@ -1,8 +1,10 @@
 import express from "express";
 import { spawn } from "child_process";
+import edgePreviewRouter from "./src/routes/edge-preview";
 
 const app = express();
 app.use(express.json());
+app.use(edgePreviewRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello, World!");
