@@ -90,3 +90,4 @@ router.get('/fetch', async (req: Request, res: Response) => {
 });
 
 export default router;
+// Re-run: worker loads code-context from node_modules (client-platform b2889833f).
